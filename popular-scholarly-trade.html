@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Popular, Scholarly & Trade Articles</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f0f4f8;
+      color: #222;
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      background: #1a3a5c;
+      color: white;
+      padding: 1.2rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    header h1 { font-size: 1.2rem; font-weight: 600; }
+    #progress-text { font-size: 0.85rem; opacity: 0.8; }
+
+    /* ── Progress bar ── */
+    #progress-bar-wrap {
+      background: #cdd8e3;
+      height: 6px;
+    }
+    #progress-bar {
+      height: 6px;
+      background: #f4a823;
+      width: 0%;
+      transition: width 0.4s ease;
+    }
+
+    /* ── Nav tabs ── */
+    #tab-nav {
+      display: flex;
+      background: #fff;
+      border-bottom: 2px solid #dde4ec;
+      overflow-x: auto;
+      padding: 0 1rem;
+    }
+    .tab-btn {
+      padding: 0.75rem 1.1rem;
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-size: 0.88rem;
+      color: #555;
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .tab-btn:hover { color: #1a3a5c; }
+    .tab-btn.active { color: #1a3a5c; border-bottom-color: #f4a823; font-weight: 600; }
+    .tab-btn.completed::after { content: ' ✓'; color: #27ae60; }
+
+    /* ── Main content ── */
+    main {
+      max-width: 860px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    .section { display: none; }
+    .section.active { display: block; }
+
+    .card {
+      background: white;
+      border-radius: 10px;
+      padding: 2rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      margin-bottom: 1.5rem;
+    }
+
+    .card h2 {
+      font-size: 1.4rem;
+      color: #1a3a5c;
+      margin-bottom: 1rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 2px solid #f0f4f8;
+    }
+
+    .card p { line-height: 1.7; color: #333; margin-bottom: 0.8rem; }
+    .card p:last-child { margin-bottom: 0; }
+
+    /* ── Publication type badges ── */
+    .type-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+    .badge-popular  { background: #fde8c8; color: #b85c00; }
+    .badge-scholarly { background: #d4eaf7; color: #1a5c8a; }
+    .badge-trade    { background: #d9f2e6; color: #1a6b41; }
+
+    /* ── Characteristic grid ── */
+    .char-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+    .char-item {
+      background: #f8fafc;
+      border-left: 4px solid #1a3a5c;
+      padding: 0.6rem 0.9rem;
+      border-radius: 0 6px 6px 0;
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+    .char-item.popular-border  { border-left-color: #f4a823; }
+    .char-item.scholarly-border { border-left-color: #2980b9; }
+    .char-item.trade-border    { border-left-color: #27ae60; }
+
+    /* ── Quiz: Multiple Choice ── */
+    .quiz-question {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 1.2rem;
+      color: #1a3a5c;
+    }
+
+    .choice-list { list-style: none; }
+    .choice-list li {
+      margin-bottom: 0.6rem;
+    }
+    .choice-btn {
+      width: 100%;
+      text-align: left;
+      padding: 0.85rem 1.1rem;
+      border: 2px solid #dde4ec;
+      border-radius: 8px;
+      background: white;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+    .choice-btn:hover:not(:disabled) { border-color: #2980b9; background: #f0f7ff; }
+    .choice-btn .choice-letter {
+      font-weight: 700;
+      color: #888;
+      min-width: 1.4rem;
+    }
+    .choice-btn.correct  { border-color: #27ae60; background: #eafaf1; }
+    .choice-btn.incorrect { border-color: #e74c3c; background: #fdf2f2; }
+    .choice-btn.correct .choice-letter  { color: #27ae60; }
+    .choice-btn.incorrect .choice-letter { color: #e74c3c; }
+
+    .feedback-box {
+      margin-top: 1rem;
+      padding: 0.9rem 1.1rem;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      display: none;
+    }
+    .feedback-box.correct  { background: #eafaf1; color: #1e8449; border: 1px solid #a9dfbf; }
+    .feedback-box.incorrect { background: #fdf2f2; color: #c0392b; border: 1px solid #f5b7b1; }
+
+    /* ── Quiz: Drag & Drop ── */
+    .dnd-instructions {
+      font-size: 0.9rem;
+      color: #555;
+      margin-bottom: 1.2rem;
+      font-style: italic;
+    }
+
+    .dnd-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .drop-zone {
+      min-height: 140px;
+      border: 2px dashed #bbc8d4;
+      border-radius: 8px;
+      padding: 0.75rem;
+      background: #f8fafc;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .drop-zone.drag-over { background: #e8f4fd; border-color: #2980b9; }
+    .drop-zone h4 {
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.6rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 2px solid;
+    }
+    .drop-zone.popular-zone h4   { color: #b85c00; border-color: #f4a823; }
+    .drop-zone.scholarly-zone h4 { color: #1a5c8a; border-color: #2980b9; }
+    .drop-zone.trade-zone h4     { color: #1a6b41; border-color: #27ae60; }
+
+    .drag-bank {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.2rem;
+      min-height: 44px;
+      padding: 0.5rem;
+      background: #fff;
+      border: 1px solid #dde4ec;
+      border-radius: 8px;
+    }
+
+    .drag-chip {
+      padding: 0.4rem 0.85rem;
+      background: #1a3a5c;
+      color: white;
+      border-radius: 20px;
+      font-size: 0.84rem;
+      cursor: grab;
+      user-select: none;
+      transition: opacity 0.2s, transform 0.1s;
+      touch-action: none;
+    }
+    .drag-chip:active { cursor: grabbing; opacity: 0.7; transform: scale(1.05); }
+    .drag-chip.correct-chip  { background: #27ae60; }
+    .drag-chip.incorrect-chip { background: #e74c3c; }
+
+    .dnd-feedback {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      display: none;
+    }
+
+    /* ── Buttons ── */
+    .btn-row {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .btn {
+      padding: 0.7rem 1.5rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn-primary  { background: #1a3a5c; color: white; }
+    .btn-primary:hover  { background: #14304e; }
+    .btn-secondary { background: #eef2f7; color: #1a3a5c; }
+    .btn-secondary:hover { background: #dde4ec; }
+    .btn-check    { background: #f4a823; color: white; }
+    .btn-check:hover    { background: #d4891a; }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* ── Completion screen ── */
+    #section-complete .card { text-align: center; padding: 3rem 2rem; }
+    .complete-icon { font-size: 4rem; margin-bottom: 1rem; }
+    #section-complete h2 { border: none; font-size: 1.6rem; }
+    #section-complete p  { font-size: 1rem; color: #555; margin-top: 0.5rem; }
+    .score-display {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #1a3a5c;
+      margin: 1rem 0;
+    }
+
+    /* ── Comparison table ── */
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      margin-top: 1rem;
+    }
+    .compare-table th, .compare-table td {
+      border: 1px solid #dde4ec;
+      padding: 0.6rem 0.8rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    .compare-table th { background: #1a3a5c; color: white; font-weight: 600; }
+    .compare-table tr:nth-child(even) td { background: #f8fafc; }
+    .compare-table td:first-child { font-weight: 600; color: #444; }
+
+    @media (max-width: 600px) {
+      .char-grid { grid-template-columns: 1fr; }
+      .dnd-layout { grid-template-columns: 1fr; }
+      header h1 { font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Popular, Scholarly &amp; Trade Articles</h1>
+  <span id="progress-text">Section 1 of 6</span>
+</header>
+<div id="progress-bar-wrap"><div id="progress-bar"></div></div>
+
+<nav id="tab-nav">
+  <button class="tab-btn active" data-section="0">Introduction</button>
+  <button class="tab-btn" data-section="1">Popular</button>
+  <button class="tab-btn" data-section="2">Scholarly</button>
+  <button class="tab-btn" data-section="3">Trade</button>
+  <button class="tab-btn" data-section="4">Quiz</button>
+  <button class="tab-btn" data-section="5">Summary</button>
+</nav>
+
+<main>
+
+  <!-- ══ SECTION 0: Introduction ══ -->
+  <div id="section-0" class="section active">
+    <div class="card">
+      <h2>About This Tutorial</h2>
+      <p>When you search for information, you'll encounter many different types of publications. Knowing the difference helps you find the right source for your purpose.</p>
+      <p>This tutorial will help you distinguish between three major types of articles:</p>
+      <div class="char-grid" style="margin-top:1.2rem">
+        <div class="char-item popular-border"><strong>Popular Magazines</strong><br>Written for a general audience on everyday topics</div>
+        <div class="char-item scholarly-border"><strong>Scholarly Journals</strong><br>Research written by and for experts and academics</div>
+        <div class="char-item trade-border"><strong>Trade Publications</strong><br>Industry news written for professionals in a field</div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="goTo(1)">Start Tutorial →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SECTION 1: Popular ══ -->
+  <div id="section-1" class="section">
+    <div class="card">
+      <span class="type-badge badge-popular">Popular Magazines</span>
+      <h2>What Are Popular Magazine Articles?</h2>
+      <p>Popular magazines are typically focused on <strong>current events or general interests</strong>. Their purpose is to inform, entertain, or elicit an emotional response from readers.</p>
+      <p>They are often written by <strong>staff writers, journalists, or freelancers</strong>, and are intended for the <strong>general public</strong>. Because of this, the language avoids heavy technical jargon and terminology.</p>
+      <p>Popular magazine articles generally <strong>do not cite their sources</strong>. However, some respected magazines publish substantial, well-researched content that can be useful as a starting point for research.</p>
+      <h2 style="margin-top:1.5rem">Key Characteristics</h2>
+      <div class="char-grid">
+        <div class="char-item popular-border">Focused on current events or general interest topics</div>
+        <div class="char-item popular-border">Written by journalists, staff writers, or freelancers</div>
+        <div class="char-item popular-border">Intended for the general public</div>
+        <div class="char-item popular-border">Informal, accessible language — no technical jargon</div>
+        <div class="char-item popular-border">Sources are usually not cited</div>
+        <div class="char-item popular-border">Typically includes photos, advertisements, and visual content</div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="goTo(0)">← Back</button>
+        <button class="btn btn-primary" onclick="goTo(2)">Next: Scholarly →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SECTION 2: Scholarly ══ -->
+  <div id="section-2" class="section">
+    <div class="card">
+      <span class="type-badge badge-scholarly">Scholarly Journals</span>
+      <h2>What Are Scholarly Journal Articles?</h2>
+      <p>Scholarly journals typically contain <strong>research results, literature reviews, and book reviews</strong>. Their purpose is to share new research or scholarship with the academic community.</p>
+      <p>The writing style is <strong>very formal and technical</strong>, using discipline-specific vocabulary. Articles are written by <strong>professors, scholars, or researchers</strong>, and are intended for other scholars, researchers, and students.</p>
+      <p>Scholarly journal articles go through a process called <strong>peer review</strong> — other experts in the same field (called peers or referees) evaluate the work before it is published. A "peer-reviewed" label is a strong indicator of quality and credibility.</p>
+      <p>Authors <strong>always cite their sources</strong> in reference lists or footnotes.</p>
+      <h2 style="margin-top:1.5rem">Key Characteristics</h2>
+      <div class="char-grid">
+        <div class="char-item scholarly-border">Contains research results, reviews, and academic scholarship</div>
+        <div class="char-item scholarly-border">Written by professors, scholars, or researchers</div>
+        <div class="char-item scholarly-border">Intended for scholars, researchers, and students</div>
+        <div class="char-item scholarly-border">Formal, technical language with discipline-specific terms</div>
+        <div class="char-item scholarly-border">Always includes citations / reference lists</div>
+        <div class="char-item scholarly-border">Goes through peer review before publication</div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="goTo(1)">← Back</button>
+        <button class="btn btn-primary" onclick="goTo(3)">Next: Trade →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SECTION 3: Trade ══ -->
+  <div id="section-3" class="section">
+    <div class="card">
+      <span class="type-badge badge-trade">Trade Publications</span>
+      <h2>What Are Trade Publications?</h2>
+      <p>Trade publications contain articles about <strong>a specific profession, business, or industry</strong>. Their purpose is to inform about business or industry news, trends, and products.</p>
+      <p>They are written by <strong>staff writers, business professionals, and industry professionals</strong>. The audience is similarly specialized — <strong>business and industry professionals</strong> in that particular field.</p>
+      <p>Trade publications <strong>look similar to popular magazines</strong> — they often have lots of advertisements — but the content is focused toward a <strong>narrow, professional audience</strong> rather than the general public.</p>
+      <h2 style="margin-top:1.5rem">Key Characteristics</h2>
+      <div class="char-grid">
+        <div class="char-item trade-border">Focused on a specific profession, industry, or business sector</div>
+        <div class="char-item trade-border">Written by staff writers and industry professionals</div>
+        <div class="char-item trade-border">Intended for professionals in that industry</div>
+        <div class="char-item trade-border">Less technical than scholarly; more specialized than popular</div>
+        <div class="char-item trade-border">May or may not cite sources</div>
+        <div class="char-item trade-border">Visually resembles popular magazines; often contains many ads</div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="goTo(2)">← Back</button>
+        <button class="btn btn-primary" onclick="goTo(4)">Next: Quiz →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SECTION 4: Quiz ══ -->
+  <div id="section-4" class="section">
+
+    <!-- Question 1: Multiple Choice -->
+    <div class="card" id="q1-card">
+      <h2>Quiz — Question 1 of 2</h2>
+      <p class="quiz-question">Which statement is TRUE of popular magazine articles?</p>
+      <ul class="choice-list" id="q1-choices">
+        <li><button class="choice-btn" onclick="checkMC(this, false, 'A')"><span class="choice-letter">A</span> They don't have much advertising.</button></li>
+        <li><button class="choice-btn" onclick="checkMC(this, false, 'B')"><span class="choice-letter">B</span> They are written by scientists, researchers, and experts.</button></li>
+        <li><button class="choice-btn" onclick="checkMC(this, false, 'C')"><span class="choice-letter">C</span> They have a bibliography of cited sources.</button></li>
+        <li><button class="choice-btn" onclick="checkMC(this, true,  'D')"><span class="choice-letter">D</span> They contain lots of photos and images.</button></li>
+      </ul>
+      <div class="feedback-box" id="q1-feedback"></div>
+    </div>
+
+    <!-- Question 2: Drag & Drop -->
+    <div class="card" id="q2-card" style="display:none">
+      <h2>Quiz — Question 2 of 2</h2>
+      <p class="quiz-question">Drag each characteristic to the correct publication type.</p>
+      <p class="dnd-instructions">Drag a chip from the bank below into the matching column. You can drag chips back to the bank to change your answer.</p>
+
+      <div class="drag-bank" id="drag-bank">
+        <div class="drag-chip" draggable="true" data-answer="scholarly" id="chip-peerreviewed">Goes through peer review</div>
+        <div class="drag-chip" draggable="true" data-answer="popular"   id="chip-general">Written for the general public</div>
+        <div class="drag-chip" draggable="true" data-answer="trade"     id="chip-industry">Focused on a specific industry</div>
+        <div class="drag-chip" draggable="true" data-answer="scholarly" id="chip-cites">Always cites sources</div>
+        <div class="drag-chip" draggable="true" data-answer="popular"   id="chip-entertain">Purpose: inform or entertain</div>
+        <div class="drag-chip" draggable="true" data-answer="trade"     id="chip-professionals">Written for industry professionals</div>
+      </div>
+
+      <div class="dnd-layout">
+        <div class="drop-zone popular-zone"   id="drop-popular"   data-zone="popular">
+          <h4>Popular</h4>
+        </div>
+        <div class="drop-zone scholarly-zone" id="drop-scholarly" data-zone="scholarly">
+          <h4>Scholarly</h4>
+        </div>
+        <div class="drop-zone trade-zone"     id="drop-trade"     data-zone="trade">
+          <h4>Trade</h4>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-check" id="dnd-check-btn" onclick="checkDnD()">Check My Answers</button>
+        <button class="btn btn-secondary" id="dnd-reset-btn" onclick="resetDnD()">Reset</button>
+      </div>
+      <div class="feedback-box" id="q2-feedback"></div>
+    </div>
+
+    <!-- Nav -->
+    <div class="btn-row" id="quiz-nav" style="display:none">
+      <button class="btn btn-primary" onclick="goTo(5)">See Summary →</button>
+    </div>
+
+  </div>
+
+  <!-- ══ SECTION 5: Summary ══ -->
+  <div id="section-5" class="section">
+    <div class="card" id="section-complete">
+      <div class="complete-icon">🎓</div>
+      <h2>Tutorial Complete!</h2>
+      <p id="score-msg">You've finished the tutorial.</p>
+      <div class="score-display" id="score-display"></div>
+    </div>
+
+    <div class="card">
+      <h2>Quick Reference</h2>
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>Popular</th>
+            <th>Scholarly</th>
+            <th>Trade</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Written by</td>
+            <td>Journalists, freelancers</td>
+            <td>Professors, researchers</td>
+            <td>Industry professionals</td>
+          </tr>
+          <tr>
+            <td>Audience</td>
+            <td>General public</td>
+            <td>Scholars, researchers</td>
+            <td>Industry professionals</td>
+          </tr>
+          <tr>
+            <td>Language</td>
+            <td>Informal, accessible</td>
+            <td>Formal, technical</td>
+            <td>Semi-technical</td>
+          </tr>
+          <tr>
+            <td>Cites sources?</td>
+            <td>Rarely</td>
+            <td>Always</td>
+            <td>Sometimes</td>
+          </tr>
+          <tr>
+            <td>Peer reviewed?</td>
+            <td>No</td>
+            <td>Yes</td>
+            <td>No</td>
+          </tr>
+          <tr>
+            <td>Examples</td>
+            <td><em>Time, National Geographic</em></td>
+            <td><em>Journal of the American Medical Association</em></td>
+            <td><em>Library Journal, Advertising Age</em></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>Need More Help?</h2>
+      <p>If you have questions or need assistance finding the right sources for your research, <strong>ask a librarian</strong>. We're here to help!</p>
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="goTo(0)">← Start Over</button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+  // ── State ──────────────────────────────────────────────────────────────
+  const TOTAL_SECTIONS = 6;
+  let currentSection = 0;
+  const visited = new Array(TOTAL_SECTIONS).fill(false);
+  visited[0] = true;
+
+  let q1Answered = false;
+  let q1Correct  = false;
+  let q2Checked  = false;
+  let q2Score    = 0;
+
+  // ── Navigation ─────────────────────────────────────────────────────────
+  function goTo(n) {
+    document.getElementById('section-' + currentSection).classList.remove('active');
+    document.querySelectorAll('.tab-btn')[currentSection].classList.remove('active');
+
+    currentSection = n;
+    visited[n] = true;
+
+    document.getElementById('section-' + n).classList.add('active');
+    const tabs = document.querySelectorAll('.tab-btn');
+    tabs[n].classList.add('active');
+
+    // Mark previous content sections as completed
+    for (let i = 0; i < TOTAL_SECTIONS; i++) {
+      if (visited[i] && i !== n && i < 4) tabs[i].classList.add('completed');
+    }
+
+    updateProgress();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function updateProgress() {
+    const pct = Math.round(((currentSection) / (TOTAL_SECTIONS - 1)) * 100);
+    document.getElementById('progress-bar').style.width = pct + '%';
+    document.getElementById('progress-text').textContent =
+      'Section ' + (currentSection + 1) + ' of ' + TOTAL_SECTIONS;
+  }
+
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => goTo(parseInt(btn.dataset.section)));
+  });
+
+  // ── Q1: Multiple Choice ────────────────────────────────────────────────
+  function checkMC(btn, isCorrect, letter) {
+    if (q1Answered) return;
+    q1Answered = true;
+    q1Correct  = isCorrect;
+
+    // Disable all choices
+    document.querySelectorAll('#q1-choices .choice-btn').forEach(b => b.disabled = true);
+
+    const fb = document.getElementById('q1-feedback');
+    if (isCorrect) {
+      btn.classList.add('correct');
+      fb.className = 'feedback-box correct';
+      fb.innerHTML = '✓ <strong>Correct!</strong> Popular magazines are known for their visual appeal — lots of photos, graphics, and images. They don\'t require citations and are written for a general, non-expert audience.';
+    } else {
+      btn.classList.add('incorrect');
+      // Highlight the correct answer (D)
+      document.querySelectorAll('#q1-choices .choice-btn').forEach(b => {
+        if (b.querySelector('.choice-letter').textContent === 'D') b.classList.add('correct');
+      });
+      fb.className = 'feedback-box incorrect';
+      fb.innerHTML = '✗ <strong>Not quite.</strong> The correct answer is <strong>D — They contain lots of photos and images.</strong> Popular magazines are visually rich and written for a general audience, unlike scholarly journals which require citations and are written by researchers.';
+    }
+    fb.style.display = 'block';
+
+    // Show Q2 after a short delay
+    setTimeout(() => {
+      document.getElementById('q2-card').style.display = 'block';
+      document.getElementById('q2-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 800);
+  }
+
+  // ── Q2: Drag & Drop ────────────────────────────────────────────────────
+  let draggedChip = null;
+
+  function initDnD() {
+    document.querySelectorAll('.drag-chip').forEach(chip => {
+      chip.addEventListener('dragstart', e => {
+        draggedChip = chip;
+        e.dataTransfer.effectAllowed = 'move';
+        setTimeout(() => chip.style.opacity = '0.4', 0);
+      });
+      chip.addEventListener('dragend', () => {
+        chip.style.opacity = '1';
+        draggedChip = null;
+      });
+    });
+
+    const zones = [...document.querySelectorAll('.drop-zone'), document.getElementById('drag-bank')];
+    zones.forEach(zone => {
+      zone.addEventListener('dragover', e => {
+        e.preventDefault();
+        zone.classList.add('drag-over');
+      });
+      zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+      zone.addEventListener('drop', e => {
+        e.preventDefault();
+        zone.classList.remove('drag-over');
+        if (draggedChip) zone.appendChild(draggedChip);
+      });
+    });
+  }
+
+  function checkDnD() {
+    const chips = document.querySelectorAll('.drag-chip');
+    let correct = 0;
+    let total   = chips.length;
+
+    chips.forEach(chip => {
+      const parentZone = chip.parentElement.dataset.zone || 'bank';
+      const expected   = chip.dataset.answer;
+      chip.classList.remove('correct-chip', 'incorrect-chip');
+
+      if (parentZone === expected) {
+        chip.classList.add('correct-chip');
+        correct++;
+      } else if (parentZone !== 'bank') {
+        chip.classList.add('incorrect-chip');
+      }
+    });
+
+    q2Score   = correct;
+    q2Checked = true;
+
+    const fb = document.getElementById('q2-feedback');
+    if (correct === total) {
+      fb.className = 'feedback-box correct';
+      fb.innerHTML = '✓ <strong>Perfect!</strong> All ' + total + ' characteristics are in the right place.';
+    } else {
+      fb.className = 'feedback-box incorrect';
+      fb.innerHTML = '✗ You got <strong>' + correct + ' of ' + total + '</strong> correct. Green chips are correct; red chips need to move. Try again, or continue to the summary.';
+    }
+    fb.style.display = 'block';
+
+    document.getElementById('quiz-nav').style.display = 'flex';
+    updateSummaryScore();
+  }
+
+  function resetDnD() {
+    const bank = document.getElementById('drag-bank');
+    document.querySelectorAll('.drag-chip').forEach(chip => {
+      chip.classList.remove('correct-chip', 'incorrect-chip');
+      bank.appendChild(chip);
+    });
+    document.getElementById('q2-feedback').style.display = 'none';
+    document.getElementById('quiz-nav').style.display = 'none';
+    q2Checked = false;
+  }
+
+  function updateSummaryScore() {
+    const total = 8; // 1 MC + 6 DnD + 1 completion bonus
+    let earned  = (q1Correct ? 1 : 0) + q2Score;
+    const pct   = Math.round((earned / 7) * 100);
+    document.getElementById('score-display').textContent = earned + ' / 7 correct';
+    document.getElementById('score-msg').textContent =
+      pct === 100 ? 'Excellent work — you nailed it! 🎉' :
+      pct >= 70   ? 'Good job! Review any missed items in the sections above.' :
+                    'Nice effort! Take another look at the sections and try the quiz again.';
+  }
+
+  // ── Init ───────────────────────────────────────────────────────────────
+  updateProgress();
+  initDnD();
+</script>
+
+</body>
+</html>
