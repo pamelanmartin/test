@@ -5,63 +5,85 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Popular, Scholarly & Trade Articles</title>
   <style>
+    :root {
+      --ui-gold: #F1B300;
+      --ui-gold-dark: #c89000;
+      --ui-black: #191919;
+      --ui-silver: #808080;
+      --ui-silver-light: #d6d6d6;
+      --ui-white: #FFFFFF;
+      --ui-bg: #f7f7f7;
+      --ui-card-border: #e3e3e3;
+      --ui-success: #1f7a3f;
+      --ui-success-bg: #edf8f0;
+      --ui-danger: #b3261e;
+      --ui-danger-bg: #fff1f0;
+      --ui-focus: #0b57d0;
+    }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: #f0f4f8;
-      color: #222;
+      font-family: Arial, sans-serif;
+      background: var(--ui-bg);
+      color: var(--ui-black);
       min-height: 100vh;
     }
 
-    /* ── Header ── */
     header {
-      background: #1a3a5c;
-      color: white;
+      background: var(--ui-black);
+      color: var(--ui-white);
       padding: 1.2rem 2rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      border-bottom: 4px solid var(--ui-gold);
     }
-    header h1 { font-size: 1.2rem; font-weight: 600; }
-    #progress-text { font-size: 0.85rem; opacity: 0.8; }
+    header h1 { font-size: 1.2rem; font-weight: 700; }
+    #progress-text { font-size: 0.9rem; opacity: 0.95; }
 
-    /* ── Progress bar ── */
     #progress-bar-wrap {
-      background: #cdd8e3;
-      height: 6px;
+      background: #d9d9d9;
+      height: 8px;
     }
     #progress-bar {
-      height: 6px;
-      background: #f4a823;
+      height: 8px;
+      background: var(--ui-gold);
       width: 0%;
       transition: width 0.4s ease;
     }
 
-    /* ── Nav tabs ── */
     #tab-nav {
       display: flex;
-      background: #fff;
-      border-bottom: 2px solid #dde4ec;
+      background: var(--ui-white);
+      border-bottom: 2px solid var(--ui-silver-light);
       overflow-x: auto;
       padding: 0 1rem;
     }
     .tab-btn {
-      padding: 0.75rem 1.1rem;
+      padding: 0.85rem 1.1rem;
       border: none;
       background: none;
       cursor: pointer;
-      font-size: 0.88rem;
-      color: #555;
-      border-bottom: 3px solid transparent;
+      font-size: 0.92rem;
+      color: #444;
+      border-bottom: 4px solid transparent;
       white-space: nowrap;
       transition: all 0.2s;
+      font-weight: 600;
     }
-    .tab-btn:hover { color: #1a3a5c; }
-    .tab-btn.active { color: #1a3a5c; border-bottom-color: #f4a823; font-weight: 600; }
-    .tab-btn.completed::after { content: ' ✓'; color: #27ae60; }
+    .tab-btn:hover { color: var(--ui-black); background: #faf7ed; }
+    .tab-btn.active {
+      color: var(--ui-black);
+      border-bottom-color: var(--ui-gold);
+      background: #fffaf0;
+    }
+    .tab-btn.completed::after {
+      content: ' ✓';
+      color: var(--ui-success);
+      font-weight: 700;
+    }
 
-    /* ── Main content ── */
     main {
       max-width: 860px;
       margin: 2rem auto;
@@ -72,40 +94,40 @@
     .section.active { display: block; }
 
     .card {
-      background: white;
+      background: var(--ui-white);
       border-radius: 10px;
       padding: 2rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      border: 1px solid var(--ui-card-border);
       margin-bottom: 1.5rem;
     }
 
     .card h2 {
       font-size: 1.4rem;
-      color: #1a3a5c;
+      color: var(--ui-black);
       margin-bottom: 1rem;
       padding-bottom: 0.6rem;
-      border-bottom: 2px solid #f0f4f8;
+      border-bottom: 2px solid #f0f0f0;
     }
 
-    .card p { line-height: 1.7; color: #333; margin-bottom: 0.8rem; }
+    .card p { line-height: 1.7; color: #2b2b2b; margin-bottom: 0.8rem; }
     .card p:last-child { margin-bottom: 0; }
 
-    /* ── Publication type badges ── */
     .type-badge {
       display: inline-block;
-      padding: 0.25rem 0.75rem;
+      padding: 0.3rem 0.8rem;
       border-radius: 20px;
       font-size: 0.78rem;
       font-weight: 700;
       letter-spacing: 0.03em;
       margin-bottom: 1rem;
       text-transform: uppercase;
+      border: 1px solid var(--ui-silver-light);
     }
-    .badge-popular  { background: #fde8c8; color: #b85c00; }
-    .badge-scholarly { background: #d4eaf7; color: #1a5c8a; }
-    .badge-trade    { background: #d9f2e6; color: #1a6b41; }
+    .badge-popular  { background: #fff4cc; color: #6b4e00; }
+    .badge-scholarly { background: #efefef; color: var(--ui-black); }
+    .badge-trade    { background: #f5f5f5; color: #2f2f2f; }
 
-    /* ── Characteristic grid ── */
     .char-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -113,68 +135,83 @@
       margin-top: 1rem;
     }
     .char-item {
-      background: #f8fafc;
-      border-left: 4px solid #1a3a5c;
-      padding: 0.6rem 0.9rem;
+      background: #fafafa;
+      border-left: 4px solid var(--ui-black);
+      padding: 0.75rem 0.95rem;
       border-radius: 0 6px 6px 0;
-      font-size: 0.9rem;
-      line-height: 1.4;
+      font-size: 0.94rem;
+      line-height: 1.45;
     }
-    .char-item.popular-border  { border-left-color: #f4a823; }
-    .char-item.scholarly-border { border-left-color: #2980b9; }
-    .char-item.trade-border    { border-left-color: #27ae60; }
+    .char-item.popular-border  { border-left-color: var(--ui-gold); }
+    .char-item.scholarly-border { border-left-color: var(--ui-black); }
+    .char-item.trade-border    { border-left-color: var(--ui-silver); }
 
-    /* ── Quiz: Multiple Choice ── */
     .quiz-question {
       font-size: 1.05rem;
-      font-weight: 600;
+      font-weight: 700;
       margin-bottom: 1.2rem;
-      color: #1a3a5c;
+      color: var(--ui-black);
     }
 
     .choice-list { list-style: none; }
-    .choice-list li {
-      margin-bottom: 0.6rem;
-    }
+    .choice-list li { margin-bottom: 0.6rem; }
     .choice-btn {
       width: 100%;
       text-align: left;
-      padding: 0.85rem 1.1rem;
-      border: 2px solid #dde4ec;
+      padding: 0.9rem 1.1rem;
+      border: 2px solid var(--ui-silver-light);
       border-radius: 8px;
-      background: white;
+      background: var(--ui-white);
       cursor: pointer;
       font-size: 0.95rem;
       transition: all 0.2s;
       display: flex;
       align-items: center;
       gap: 0.7rem;
+      color: var(--ui-black);
     }
-    .choice-btn:hover:not(:disabled) { border-color: #2980b9; background: #f0f7ff; }
+    .choice-btn:hover:not(:disabled) {
+      border-color: var(--ui-gold-dark);
+      background: #fffaf0;
+    }
     .choice-btn .choice-letter {
       font-weight: 700;
-      color: #888;
+      color: #666;
       min-width: 1.4rem;
     }
-    .choice-btn.correct  { border-color: #27ae60; background: #eafaf1; }
-    .choice-btn.incorrect { border-color: #e74c3c; background: #fdf2f2; }
-    .choice-btn.correct .choice-letter  { color: #27ae60; }
-    .choice-btn.incorrect .choice-letter { color: #e74c3c; }
+    .choice-btn.correct  {
+      border-color: var(--ui-success);
+      background: var(--ui-success-bg);
+    }
+    .choice-btn.incorrect {
+      border-color: var(--ui-danger);
+      background: var(--ui-danger-bg);
+    }
+    .choice-btn.correct .choice-letter  { color: var(--ui-success); }
+    .choice-btn.incorrect .choice-letter { color: var(--ui-danger); }
 
     .feedback-box {
       margin-top: 1rem;
-      padding: 0.9rem 1.1rem;
+      padding: 0.95rem 1.1rem;
       border-radius: 8px;
       font-size: 0.95rem;
       display: none;
+      line-height: 1.5;
     }
-    .feedback-box.correct  { background: #eafaf1; color: #1e8449; border: 1px solid #a9dfbf; }
-    .feedback-box.incorrect { background: #fdf2f2; color: #c0392b; border: 1px solid #f5b7b1; }
+    .feedback-box.correct  {
+      background: var(--ui-success-bg);
+      color: #145a2a;
+      border: 1px solid #99c9aa;
+    }
+    .feedback-box.incorrect {
+      background: var(--ui-danger-bg);
+      color: #8d1f18;
+      border: 1px solid #df9b97;
+    }
 
-    /* ── Quiz: Drag & Drop ── */
     .dnd-instructions {
-      font-size: 0.9rem;
-      color: #555;
+      font-size: 0.95rem;
+      color: #444;
       margin-bottom: 1.2rem;
       font-style: italic;
     }
@@ -188,13 +225,13 @@
 
     .drop-zone {
       min-height: 140px;
-      border: 2px dashed #bbc8d4;
+      border: 2px dashed #b8b8b8;
       border-radius: 8px;
       padding: 0.75rem;
-      background: #f8fafc;
+      background: #fafafa;
       transition: background 0.2s, border-color 0.2s;
     }
-    .drop-zone.drag-over { background: #e8f4fd; border-color: #2980b9; }
+    .drop-zone.drag-over { background: #fff8e1; border-color: var(--ui-gold-dark); }
     .drop-zone h4 {
       font-size: 0.82rem;
       text-transform: uppercase;
@@ -203,9 +240,9 @@
       padding-bottom: 0.4rem;
       border-bottom: 2px solid;
     }
-    .drop-zone.popular-zone h4   { color: #b85c00; border-color: #f4a823; }
-    .drop-zone.scholarly-zone h4 { color: #1a5c8a; border-color: #2980b9; }
-    .drop-zone.trade-zone h4     { color: #1a6b41; border-color: #27ae60; }
+    .drop-zone.popular-zone h4   { color: #6b4e00; border-color: var(--ui-gold); }
+    .drop-zone.scholarly-zone h4 { color: var(--ui-black); border-color: var(--ui-black); }
+    .drop-zone.trade-zone h4     { color: #555; border-color: var(--ui-silver); }
 
     .drag-bank {
       display: flex;
@@ -213,34 +250,39 @@
       gap: 0.5rem;
       margin-bottom: 1.2rem;
       min-height: 44px;
-      padding: 0.5rem;
-      background: #fff;
-      border: 1px solid #dde4ec;
+      padding: 0.75rem;
+      background: var(--ui-white);
+      border: 1px solid var(--ui-silver-light);
       border-radius: 8px;
     }
 
     .drag-chip {
-      padding: 0.4rem 0.85rem;
-      background: #1a3a5c;
-      color: white;
+      padding: 0.45rem 0.85rem;
+      background: var(--ui-black);
+      color: var(--ui-white);
       border-radius: 20px;
       font-size: 0.84rem;
       cursor: grab;
       user-select: none;
       transition: opacity 0.2s, transform 0.1s;
       touch-action: none;
+      border: 2px solid transparent;
     }
     .drag-chip:active { cursor: grabbing; opacity: 0.7; transform: scale(1.05); }
-    .drag-chip.correct-chip  { background: #27ae60; }
-    .drag-chip.incorrect-chip { background: #e74c3c; }
+    .drag-chip.correct-chip  { background: var(--ui-success); }
+    .drag-chip.incorrect-chip { background: var(--ui-danger); }
 
-    .dnd-feedback {
-      margin-top: 0.5rem;
-      font-size: 0.9rem;
-      display: none;
+    .dnd-select {
+      width: 100%;
+      margin-top: 0.35rem;
+      padding: 0.55rem;
+      border: 1px solid var(--ui-silver);
+      border-radius: 6px;
+      font-size: 0.95rem;
+      background: var(--ui-white);
+      color: var(--ui-black);
     }
 
-    /* ── Buttons ── */
     .btn-row {
       display: flex;
       gap: 0.75rem;
@@ -248,55 +290,72 @@
       flex-wrap: wrap;
     }
     .btn {
-      padding: 0.7rem 1.5rem;
-      border: none;
-      border-radius: 6px;
+      padding: 0.78rem 1.5rem;
+      border: 2px solid transparent;
+      border-radius: 999px;
       font-size: 0.95rem;
       cursor: pointer;
-      font-weight: 600;
-      transition: background 0.2s, transform 0.1s;
+      font-weight: 700;
+      transition: background 0.2s, transform 0.1s, border-color 0.2s;
     }
     .btn:active { transform: scale(0.98); }
-    .btn-primary  { background: #1a3a5c; color: white; }
-    .btn-primary:hover  { background: #14304e; }
-    .btn-secondary { background: #eef2f7; color: #1a3a5c; }
-    .btn-secondary:hover { background: #dde4ec; }
-    .btn-check    { background: #f4a823; color: white; }
-    .btn-check:hover    { background: #d4891a; }
-    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-primary  { background: var(--ui-black); color: var(--ui-white); }
+    .btn-primary:hover  { background: #000; }
+    .btn-secondary {
+      background: var(--ui-white);
+      color: var(--ui-black);
+      border-color: var(--ui-silver);
+    }
+    .btn-secondary:hover { background: #f2f2f2; }
+    .btn-check    { background: var(--ui-gold); color: var(--ui-black); }
+    .btn-check:hover    { background: var(--ui-gold-dark); color: var(--ui-white); }
+    .btn:disabled { opacity: 0.45; cursor: not-allowed; }
 
-    /* ── Completion screen ── */
+    .btn:focus-visible,
+    .tab-btn:focus-visible,
+    .choice-btn:focus-visible,
+    .drag-chip:focus-visible,
+    .drop-zone:focus-visible,
+    .dnd-select:focus-visible {
+      outline: 3px solid var(--ui-focus);
+      outline-offset: 3px;
+    }
+
     #section-complete .card { text-align: center; padding: 3rem 2rem; }
     .complete-icon { font-size: 4rem; margin-bottom: 1rem; }
     #section-complete h2 { border: none; font-size: 1.6rem; }
-    #section-complete p  { font-size: 1rem; color: #555; margin-top: 0.5rem; }
+    #section-complete p  { font-size: 1rem; color: #444; margin-top: 0.5rem; }
     .score-display {
       font-size: 2.2rem;
       font-weight: 700;
-      color: #1a3a5c;
+      color: var(--ui-black);
       margin: 1rem 0;
     }
 
-    /* ── Comparison table ── */
     .compare-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 0.88rem;
+      font-size: 0.9rem;
       margin-top: 1rem;
     }
     .compare-table th, .compare-table td {
-      border: 1px solid #dde4ec;
-      padding: 0.6rem 0.8rem;
+      border: 1px solid #d8d8d8;
+      padding: 0.65rem 0.8rem;
       text-align: left;
       vertical-align: top;
     }
-    .compare-table th { background: #1a3a5c; color: white; font-weight: 600; }
-    .compare-table tr:nth-child(even) td { background: #f8fafc; }
-    .compare-table td:first-child { font-weight: 600; color: #444; }
+    .compare-table th { background: var(--ui-black); color: var(--ui-white); font-weight: 700; }
+    .compare-table tr:nth-child(even) td { background: #fafafa; }
+    .compare-table td:first-child { font-weight: 700; color: #333; }
 
     @media (max-width: 600px) {
       .char-grid { grid-template-columns: 1fr; }
       .dnd-layout { grid-template-columns: 1fr; }
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.4rem;
+      }
       header h1 { font-size: 1rem; }
     }
   </style>
@@ -309,7 +368,7 @@
 </header>
 <div id="progress-bar-wrap"><div id="progress-bar"></div></div>
 
-<nav id="tab-nav">
+<nav id="tab-nav" aria-label="Tutorial sections">
   <button class="tab-btn active" data-section="0">Introduction</button>
   <button class="tab-btn" data-section="1">Popular</button>
   <button class="tab-btn" data-section="2">Scholarly</button>
@@ -319,8 +378,6 @@
 </nav>
 
 <main>
-
-  <!-- ══ SECTION 0: Introduction ══ -->
   <div id="section-0" class="section active">
     <div class="card">
       <h2>About This Tutorial</h2>
@@ -337,14 +394,13 @@
     </div>
   </div>
 
-  <!-- ══ SECTION 1: Popular ══ -->
   <div id="section-1" class="section">
     <div class="card">
       <span class="type-badge badge-popular">Popular Magazines</span>
       <h2>What Are Popular Magazine Articles?</h2>
       <p>Popular magazines are typically focused on <strong>current events or general interests</strong>. Their purpose is to inform, entertain, or elicit an emotional response from readers.</p>
-      <p>They are often written by <strong>staff writers, journalists, or freelancers</strong>, and are intended for the <strong>general public</strong>. Because of this, the language avoids heavy technical jargon and terminology.</p>
-      <p>Popular magazine articles generally <strong>do not cite their sources</strong>. However, some respected magazines publish substantial, well-researched content that can be useful as a starting point for research.</p>
+      <p>They are often written by <strong>staff writers, journalists, or freelancers</strong>, and are intended for the <strong>general public</strong>. Because of this, the language avoids heavy technical terminology and is easy for a broad audience to understand.</p>
+      <p>Popular magazine articles generally <strong>do not cite their sources</strong>. However, some respected magazines publish substantial, well-researched content that can be useful as a starting point for learning about a topic.</p>
       <h2 style="margin-top:1.5rem">Key Characteristics</h2>
       <div class="char-grid">
         <div class="char-item popular-border">Focused on current events or general interest topics</div>
@@ -361,14 +417,13 @@
     </div>
   </div>
 
-  <!-- ══ SECTION 2: Scholarly ══ -->
   <div id="section-2" class="section">
     <div class="card">
       <span class="type-badge badge-scholarly">Scholarly Journals</span>
       <h2>What Are Scholarly Journal Articles?</h2>
       <p>Scholarly journals typically contain <strong>research results, literature reviews, and book reviews</strong>. Their purpose is to share new research or scholarship with the academic community.</p>
-      <p>The writing style is <strong>very formal and technical</strong>, using discipline-specific vocabulary. Articles are written by <strong>professors, scholars, or researchers</strong>, and are intended for other scholars, researchers, and students.</p>
-      <p>Scholarly journal articles go through a process called <strong>peer review</strong> — other experts in the same field (called peers or referees) evaluate the work before it is published. A "peer-reviewed" label is a strong indicator of quality and credibility.</p>
+      <p>The writing style is <strong>very formal and technical</strong>, using discipline-specific vocabulary. Articles are written by <strong>professors, scholars, or researchers</strong>, and are intended for students, scholars, and other experts.</p>
+      <p>Scholarly journal articles go through a process called <strong>peer review</strong> — other experts in the same field evaluate the work before it is published. A scholarly article usually includes an abstract, citations, and a reference list.</p>
       <p>Authors <strong>always cite their sources</strong> in reference lists or footnotes.</p>
       <h2 style="margin-top:1.5rem">Key Characteristics</h2>
       <div class="char-grid">
@@ -386,14 +441,13 @@
     </div>
   </div>
 
-  <!-- ══ SECTION 3: Trade ══ -->
   <div id="section-3" class="section">
     <div class="card">
       <span class="type-badge badge-trade">Trade Publications</span>
       <h2>What Are Trade Publications?</h2>
-      <p>Trade publications contain articles about <strong>a specific profession, business, or industry</strong>. Their purpose is to inform about business or industry news, trends, and products.</p>
-      <p>They are written by <strong>staff writers, business professionals, and industry professionals</strong>. The audience is similarly specialized — <strong>business and industry professionals</strong> in that particular field.</p>
-      <p>Trade publications <strong>look similar to popular magazines</strong> — they often have lots of advertisements — but the content is focused toward a <strong>narrow, professional audience</strong> rather than the general public.</p>
+      <p>Trade publications contain articles about <strong>a specific profession, business, or industry</strong>. Their purpose is to inform readers about business or industry news, trends, products, and professional developments.</p>
+      <p>They are written by <strong>staff writers, business professionals, and industry professionals</strong>. The audience is similarly specialized — <strong>business and industry professionals</strong> rather than the general public.</p>
+      <p>Trade publications <strong>look similar to popular magazines</strong> — they often have many advertisements — but the content is focused toward a <strong>narrow, professional audience</strong>. They are generally less technical than scholarly journals.</p>
       <h2 style="margin-top:1.5rem">Key Characteristics</h2>
       <div class="char-grid">
         <div class="char-item trade-border">Focused on a specific profession, industry, or business sector</div>
@@ -410,46 +464,97 @@
     </div>
   </div>
 
-  <!-- ══ SECTION 4: Quiz ══ -->
   <div id="section-4" class="section">
-
-    <!-- Question 1: Multiple Choice -->
     <div class="card" id="q1-card">
       <h2>Quiz — Question 1 of 2</h2>
       <p class="quiz-question">Which statement is TRUE of popular magazine articles?</p>
       <ul class="choice-list" id="q1-choices">
-        <li><button class="choice-btn" onclick="checkMC(this, false, 'A')"><span class="choice-letter">A</span> They don't have much advertising.</button></li>
-        <li><button class="choice-btn" onclick="checkMC(this, false, 'B')"><span class="choice-letter">B</span> They are written by scientists, researchers, and experts.</button></li>
-        <li><button class="choice-btn" onclick="checkMC(this, false, 'C')"><span class="choice-letter">C</span> They have a bibliography of cited sources.</button></li>
-        <li><button class="choice-btn" onclick="checkMC(this, true,  'D')"><span class="choice-letter">D</span> They contain lots of photos and images.</button></li>
+        <li><button class="choice-btn" onclick="checkMC(this, false)"><span class="choice-letter">A</span> They don't have much advertising.</button></li>
+        <li><button class="choice-btn" onclick="checkMC(this, false)"><span class="choice-letter">B</span> They are written by scientists, researchers, and experts.</button></li>
+        <li><button class="choice-btn" onclick="checkMC(this, false)"><span class="choice-letter">C</span> They have a bibliography of cited sources.</button></li>
+        <li><button class="choice-btn" onclick="checkMC(this, true)"><span class="choice-letter">D</span> They contain lots of photos and images.</button></li>
       </ul>
-      <div class="feedback-box" id="q1-feedback"></div>
+      <div class="feedback-box" id="q1-feedback" aria-live="polite"></div>
     </div>
 
-    <!-- Question 2: Drag & Drop -->
     <div class="card" id="q2-card" style="display:none">
       <h2>Quiz — Question 2 of 2</h2>
       <p class="quiz-question">Drag each characteristic to the correct publication type.</p>
       <p class="dnd-instructions">Drag a chip from the bank below into the matching column. You can drag chips back to the bank to change your answer.</p>
+      <p class="dnd-instructions"><strong>Keyboard alternative:</strong> Use the dropdown selectors below if you are not using drag and drop.</p>
 
-      <div class="drag-bank" id="drag-bank">
-        <div class="drag-chip" draggable="true" data-answer="scholarly" id="chip-peerreviewed">Goes through peer review</div>
-        <div class="drag-chip" draggable="true" data-answer="popular"   id="chip-general">Written for the general public</div>
-        <div class="drag-chip" draggable="true" data-answer="trade"     id="chip-industry">Focused on a specific industry</div>
-        <div class="drag-chip" draggable="true" data-answer="scholarly" id="chip-cites">Always cites sources</div>
-        <div class="drag-chip" draggable="true" data-answer="popular"   id="chip-entertain">Purpose: inform or entertain</div>
-        <div class="drag-chip" draggable="true" data-answer="trade"     id="chip-professionals">Written for industry professionals</div>
+      <div class="drag-bank" id="drag-bank" aria-label="Drag item bank">
+        <div class="drag-chip" draggable="true" data-answer="scholarly" id="chip-peerreviewed" tabindex="0">Goes through peer review</div>
+        <div class="drag-chip" draggable="true" data-answer="popular" id="chip-general" tabindex="0">Written for the general public</div>
+        <div class="drag-chip" draggable="true" data-answer="trade" id="chip-industry" tabindex="0">Focused on a specific industry</div>
+        <div class="drag-chip" draggable="true" data-answer="scholarly" id="chip-cites" tabindex="0">Always cites sources</div>
+        <div class="drag-chip" draggable="true" data-answer="popular" id="chip-entertain" tabindex="0">Purpose: inform or entertain</div>
+        <div class="drag-chip" draggable="true" data-answer="trade" id="chip-professionals" tabindex="0">Written for industry professionals</div>
       </div>
 
       <div class="dnd-layout">
-        <div class="drop-zone popular-zone"   id="drop-popular"   data-zone="popular">
+        <div class="drop-zone popular-zone" id="drop-popular" data-zone="popular" tabindex="0">
           <h4>Popular</h4>
         </div>
-        <div class="drop-zone scholarly-zone" id="drop-scholarly" data-zone="scholarly">
+        <div class="drop-zone scholarly-zone" id="drop-scholarly" data-zone="scholarly" tabindex="0">
           <h4>Scholarly</h4>
         </div>
-        <div class="drop-zone trade-zone"     id="drop-trade"     data-zone="trade">
+        <div class="drop-zone trade-zone" id="drop-trade" data-zone="trade" tabindex="0">
           <h4>Trade</h4>
+        </div>
+      </div>
+
+      <div class="card" style="padding:1.25rem; margin-top:1rem;">
+        <h2 style="font-size:1.1rem; margin-bottom:0.75rem;">Keyboard Alternative</h2>
+        <div class="char-grid">
+          <label>Goes through peer review
+            <select data-chip-id="chip-peerreviewed" class="dnd-select">
+              <option value="">Choose one</option>
+              <option value="popular">Popular</option>
+              <option value="scholarly">Scholarly</option>
+              <option value="trade">Trade</option>
+            </select>
+          </label>
+          <label>Written for the general public
+            <select data-chip-id="chip-general" class="dnd-select">
+              <option value="">Choose one</option>
+              <option value="popular">Popular</option>
+              <option value="scholarly">Scholarly</option>
+              <option value="trade">Trade</option>
+            </select>
+          </label>
+          <label>Focused on a specific industry
+            <select data-chip-id="chip-industry" class="dnd-select">
+              <option value="">Choose one</option>
+              <option value="popular">Popular</option>
+              <option value="scholarly">Scholarly</option>
+              <option value="trade">Trade</option>
+            </select>
+          </label>
+          <label>Always cites sources
+            <select data-chip-id="chip-cites" class="dnd-select">
+              <option value="">Choose one</option>
+              <option value="popular">Popular</option>
+              <option value="scholarly">Scholarly</option>
+              <option value="trade">Trade</option>
+            </select>
+          </label>
+          <label>Purpose: inform or entertain
+            <select data-chip-id="chip-entertain" class="dnd-select">
+              <option value="">Choose one</option>
+              <option value="popular">Popular</option>
+              <option value="scholarly">Scholarly</option>
+              <option value="trade">Trade</option>
+            </select>
+          </label>
+          <label>Written for industry professionals
+            <select data-chip-id="chip-professionals" class="dnd-select">
+              <option value="">Choose one</option>
+              <option value="popular">Popular</option>
+              <option value="scholarly">Scholarly</option>
+              <option value="trade">Trade</option>
+            </select>
+          </label>
         </div>
       </div>
 
@@ -457,17 +562,14 @@
         <button class="btn btn-check" id="dnd-check-btn" onclick="checkDnD()">Check My Answers</button>
         <button class="btn btn-secondary" id="dnd-reset-btn" onclick="resetDnD()">Reset</button>
       </div>
-      <div class="feedback-box" id="q2-feedback"></div>
+      <div class="feedback-box" id="q2-feedback" aria-live="polite"></div>
     </div>
 
-    <!-- Nav -->
     <div class="btn-row" id="quiz-nav" style="display:none">
       <button class="btn btn-primary" onclick="goTo(5)">See Summary →</button>
     </div>
-
   </div>
 
-  <!-- ══ SECTION 5: Summary ══ -->
   <div id="section-5" class="section">
     <div class="card" id="section-complete">
       <div class="complete-icon">🎓</div>
@@ -536,22 +638,20 @@
       </div>
     </div>
   </div>
-
 </main>
 
 <script>
-  // ── State ──────────────────────────────────────────────────────────────
   const TOTAL_SECTIONS = 6;
   let currentSection = 0;
   const visited = new Array(TOTAL_SECTIONS).fill(false);
   visited[0] = true;
 
   let q1Answered = false;
-  let q1Correct  = false;
-  let q2Checked  = false;
-  let q2Score    = 0;
+  let q1Correct = false;
+  let q2Checked = false;
+  let q2Score = 0;
+  let draggedChip = null;
 
-  // ── Navigation ─────────────────────────────────────────────────────────
   function goTo(n) {
     document.getElementById('section-' + currentSection).classList.remove('active');
     document.querySelectorAll('.tab-btn')[currentSection].classList.remove('active');
@@ -563,7 +663,6 @@
     const tabs = document.querySelectorAll('.tab-btn');
     tabs[n].classList.add('active');
 
-    // Mark previous content sections as completed
     for (let i = 0; i < TOTAL_SECTIONS; i++) {
       if (visited[i] && i !== n && i < 4) tabs[i].classList.add('completed');
     }
@@ -573,50 +672,47 @@
   }
 
   function updateProgress() {
-    const pct = Math.round(((currentSection) / (TOTAL_SECTIONS - 1)) * 100);
+    const pct = Math.round((currentSection / (TOTAL_SECTIONS - 1)) * 100);
     document.getElementById('progress-bar').style.width = pct + '%';
-    document.getElementById('progress-text').textContent =
-      'Section ' + (currentSection + 1) + ' of ' + TOTAL_SECTIONS;
+    document.getElementById('progress-text').textContent = 'Section ' + (currentSection + 1) + ' of ' + TOTAL_SECTIONS;
   }
 
   document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.addEventListener('click', () => goTo(parseInt(btn.dataset.section)));
+    btn.addEventListener('click', () => goTo(parseInt(btn.dataset.section, 10)));
   });
 
-  // ── Q1: Multiple Choice ────────────────────────────────────────────────
-  function checkMC(btn, isCorrect, letter) {
+  function checkMC(btn, isCorrect) {
     if (q1Answered) return;
     q1Answered = true;
-    q1Correct  = isCorrect;
+    q1Correct = isCorrect;
 
-    // Disable all choices
     document.querySelectorAll('#q1-choices .choice-btn').forEach(b => b.disabled = true);
 
     const fb = document.getElementById('q1-feedback');
     if (isCorrect) {
       btn.classList.add('correct');
+      btn.setAttribute('aria-label', 'Correct answer selected');
       fb.className = 'feedback-box correct';
-      fb.innerHTML = '✓ <strong>Correct!</strong> Popular magazines are known for their visual appeal — lots of photos, graphics, and images. They don\'t require citations and are written for a general, non-expert audience.';
+      fb.innerHTML = '✓ <strong>Correct!</strong> Popular magazines are known for their visual appeal and are written for a general audience.';
     } else {
       btn.classList.add('incorrect');
-      // Highlight the correct answer (D)
+      btn.setAttribute('aria-label', 'Incorrect answer selected');
       document.querySelectorAll('#q1-choices .choice-btn').forEach(b => {
-        if (b.querySelector('.choice-letter').textContent === 'D') b.classList.add('correct');
+        if (b.querySelector('.choice-letter').textContent === 'D') {
+          b.classList.add('correct');
+          b.setAttribute('aria-label', 'Correct answer');
+        }
       });
       fb.className = 'feedback-box incorrect';
-      fb.innerHTML = '✗ <strong>Not quite.</strong> The correct answer is <strong>D — They contain lots of photos and images.</strong> Popular magazines are visually rich and written for a general audience, unlike scholarly journals which require citations and are written by researchers.';
+      fb.innerHTML = '✗ <strong>Not quite.</strong> The correct answer is <strong>D — They contain lots of photos and images.</strong>';
     }
     fb.style.display = 'block';
 
-    // Show Q2 after a short delay
     setTimeout(() => {
       document.getElementById('q2-card').style.display = 'block';
       document.getElementById('q2-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 800);
   }
-
-  // ── Q2: Drag & Drop ────────────────────────────────────────────────────
-  let draggedChip = null;
 
   function initDnD() {
     document.querySelectorAll('.drag-chip').forEach(chip => {
@@ -646,25 +742,45 @@
     });
   }
 
+  function applySelectAnswersToBoard() {
+    const bank = document.getElementById('drag-bank');
+    document.querySelectorAll('.drag-chip').forEach(chip => bank.appendChild(chip));
+
+    document.querySelectorAll('.dnd-select').forEach(select => {
+      const chip = document.getElementById(select.dataset.chipId);
+      const selectedZone = select.value;
+      if (!chip) return;
+      if (selectedZone) {
+        const zone = document.getElementById('drop-' + selectedZone);
+        if (zone) zone.appendChild(chip);
+      }
+    });
+  }
+
   function checkDnD() {
+    applySelectAnswersToBoard();
+
     const chips = document.querySelectorAll('.drag-chip');
     let correct = 0;
-    let total   = chips.length;
+    const total = chips.length;
 
     chips.forEach(chip => {
       const parentZone = chip.parentElement.dataset.zone || 'bank';
-      const expected   = chip.dataset.answer;
+      const expected = chip.dataset.answer;
       chip.classList.remove('correct-chip', 'incorrect-chip');
+      chip.setAttribute('aria-label', chip.textContent.trim());
 
       if (parentZone === expected) {
         chip.classList.add('correct-chip');
+        chip.setAttribute('aria-label', chip.textContent.trim() + ' correct');
         correct++;
       } else if (parentZone !== 'bank') {
         chip.classList.add('incorrect-chip');
+        chip.setAttribute('aria-label', chip.textContent.trim() + ' incorrect');
       }
     });
 
-    q2Score   = correct;
+    q2Score = correct;
     q2Checked = true;
 
     const fb = document.getElementById('q2-feedback');
@@ -673,7 +789,7 @@
       fb.innerHTML = '✓ <strong>Perfect!</strong> All ' + total + ' characteristics are in the right place.';
     } else {
       fb.className = 'feedback-box incorrect';
-      fb.innerHTML = '✗ You got <strong>' + correct + ' of ' + total + '</strong> correct. Green chips are correct; red chips need to move. Try again, or continue to the summary.';
+      fb.innerHTML = '✗ You got <strong>' + correct + ' of ' + total + '</strong> correct. Items marked in green are correct, and items marked in red need to move.';
     }
     fb.style.display = 'block';
 
@@ -685,25 +801,28 @@
     const bank = document.getElementById('drag-bank');
     document.querySelectorAll('.drag-chip').forEach(chip => {
       chip.classList.remove('correct-chip', 'incorrect-chip');
+      chip.removeAttribute('aria-label');
       bank.appendChild(chip);
+    });
+    document.querySelectorAll('.dnd-select').forEach(select => {
+      select.value = '';
     });
     document.getElementById('q2-feedback').style.display = 'none';
     document.getElementById('quiz-nav').style.display = 'none';
     q2Checked = false;
+    q2Score = 0;
   }
 
   function updateSummaryScore() {
-    const total = 8; // 1 MC + 6 DnD + 1 completion bonus
-    let earned  = (q1Correct ? 1 : 0) + q2Score;
-    const pct   = Math.round((earned / 7) * 100);
+    const earned = (q1Correct ? 1 : 0) + q2Score;
+    const pct = Math.round((earned / 7) * 100);
     document.getElementById('score-display').textContent = earned + ' / 7 correct';
     document.getElementById('score-msg').textContent =
       pct === 100 ? 'Excellent work — you nailed it! 🎉' :
-      pct >= 70   ? 'Good job! Review any missed items in the sections above.' :
-                    'Nice effort! Take another look at the sections and try the quiz again.';
+      pct >= 70 ? 'Good job! Review any missed items in the sections above.' :
+      'Nice effort! Take another look at the sections and try the quiz again.';
   }
 
-  // ── Init ───────────────────────────────────────────────────────────────
   updateProgress();
   initDnD();
 </script>
