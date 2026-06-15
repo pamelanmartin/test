@@ -399,8 +399,8 @@
       <span class="type-badge badge-popular">Popular Magazines</span>
       <h2>What Are Popular Magazine Articles?</h2>
       <p>Popular magazines are typically focused on <strong>current events or general interests</strong>. Their purpose is to inform, entertain, or elicit an emotional response from readers.</p>
-      <p>They are often written by <strong>staff writers, journalists, or freelancers</strong>, and are intended for the <strong>general public</strong>. Because of this, the language avoids heavy technical terminology and is easy for a broad audience to understand.</p>
-      <p>Popular magazine articles generally <strong>do not cite their sources</strong>. However, some respected magazines publish substantial, well-researched content that can be useful as a starting point for learning about a topic.</p>
+      <p>They are often written by <strong>staff writers, journalists, or freelancers</strong>, and are intended for the <strong>general public</strong>. Because of this, the language avoids heavy tec[...]
+      <p>Popular magazine articles generally <strong>do not cite their sources</strong>. However, some respected magazines publish substantial, well-researched content that can be useful as a starting[...]
       <h2 style="margin-top:1.5rem">Key Characteristics</h2>
       <div class="char-grid">
         <div class="char-item popular-border">Focused on current events or general interest topics</div>
@@ -421,9 +421,9 @@
     <div class="card">
       <span class="type-badge badge-scholarly">Scholarly Journals</span>
       <h2>What Are Scholarly Journal Articles?</h2>
-      <p>Scholarly journals typically contain <strong>research results, literature reviews, and book reviews</strong>. Their purpose is to share new research or scholarship with the academic community.</p>
-      <p>The writing style is <strong>very formal and technical</strong>, using discipline-specific vocabulary. Articles are written by <strong>professors, scholars, or researchers</strong>, and are intended for students, scholars, and other experts.</p>
-      <p>Scholarly journal articles go through a process called <strong>peer review</strong> — other experts in the same field evaluate the work before it is published. A scholarly article usually includes an abstract, citations, and a reference list.</p>
+      <p>Scholarly journals typically contain <strong>research results, literature reviews, and book reviews</strong>. Their purpose is to share new research or scholarship with the academic community[...]
+      <p>The writing style is <strong>very formal and technical</strong>, using discipline-specific vocabulary. Articles are written by <strong>professors, scholars, or researchers</strong>, and are i[...]
+      <p>Scholarly journal articles go through a process called <strong>peer review</strong> — other experts in the same field evaluate the work before it is published. A scholarly article usually i[...]
       <p>Authors <strong>always cite their sources</strong> in reference lists or footnotes.</p>
       <h2 style="margin-top:1.5rem">Key Characteristics</h2>
       <div class="char-grid">
@@ -445,9 +445,9 @@
     <div class="card">
       <span class="type-badge badge-trade">Trade Publications</span>
       <h2>What Are Trade Publications?</h2>
-      <p>Trade publications contain articles about <strong>a specific profession, business, or industry</strong>. Their purpose is to inform readers about business or industry news, trends, products, and professional developments.</p>
-      <p>They are written by <strong>staff writers, business professionals, and industry professionals</strong>. The audience is similarly specialized — <strong>business and industry professionals</strong> rather than the general public.</p>
-      <p>Trade publications <strong>look similar to popular magazines</strong> — they often have many advertisements — but the content is focused toward a <strong>narrow, professional audience</strong>. They are generally less technical than scholarly journals.</p>
+      <p>Trade publications contain articles about <strong>a specific profession, business, or industry</strong>. Their purpose is to inform readers about business or industry news, trends, products, [...]
+      <p>They are written by <strong>staff writers, business professionals, and industry professionals</strong>. The audience is similarly specialized — <strong>business and industry professionals</[...]
+      <p>Trade publications <strong>look similar to popular magazines</strong> — they often have many advertisements — but the content is focused toward a <strong>narrow, professional audience</st[...]
       <h2 style="margin-top:1.5rem">Key Characteristics</h2>
       <div class="char-grid">
         <div class="char-item trade-border">Focused on a specific profession, industry, or business sector</div>
@@ -743,6 +743,9 @@
   }
 
   function applySelectAnswersToBoard() {
+    const anySelected = Array.from(document.querySelectorAll('.dnd-select')).some(select => select.value);
+    if (!anySelected) return;
+
     const bank = document.getElementById('drag-bank');
     document.querySelectorAll('.drag-chip').forEach(chip => bank.appendChild(chip));
 
