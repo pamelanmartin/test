@@ -1,1 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Library Tutorials</title>
+  <meta name="description" content="Accessible library tutorials for students and instructors." />
+  <style>
+    :root {
+      --gold: #F1B300;   /* Pride Gold */
+      --black: #191919;  /* Black */
+      --silver: #808080; /* Silver */
+      --white: #FFFFFF;  /* White */
+      --focus: #005FCC;  /* High-contrast focus color */
+    }
 
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--black);
+      background: var(--white);
+      line-height: 1.6;
+    }
+
+    header {
+      background: var(--black);
+      color: var(--white);
+      padding: 2rem 1rem;
+      border-bottom: 6px solid var(--gold);
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 2rem;
+      line-height: 1.2;
+    }
+
+    main {
+      padding: 2rem 0 3rem;
+    }
+
+    h2 {
+      font-size: 1.4rem;
+      margin-top: 0;
+    }
+
+    p {
+      margin-top: 0;
+    }
+
+    ul.tutorial-list {
+      list-style: none;
+      margin: 1rem 0 0;
+      padding: 0;
+    }
+
+    ul.tutorial-list li {
+      margin: 0 0 1rem;
+      padding: 1rem;
+      border: 2px solid #d9d9d9;
+      border-radius: 0.5rem;
+      background: #fafafa;
+    }
+
+    .tutorial-link {
+      display: inline-block;
+      font-weight: 700;
+      color: var(--black);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .tutorial-link:hover,
+    .tutorial-link:focus-visible {
+      color: #000;
+    }
+
+    .tutorial-desc {
+      margin: 0.35rem 0 0;
+      color: #333;
+    }
+
+    /* Visible keyboard focus */
+    a:focus-visible,
+    button:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+
+    footer {
+      border-top: 1px solid #d9d9d9;
+      color: #333;
+      font-size: 0.95rem;
+      padding: 1rem 0 2rem;
+    }
+
+    code {
+      background: #f3f3f3;
+      padding: 0.1rem 0.3rem;
+      border-radius: 3px;
+      font-size: 0.95em;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Library Tutorials</h1>
+      <p>Accessible, self-contained tutorials for research and information literacy.</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <h2>Available tutorials</h2>
+    <p>Select a tutorial below:</p>
+
+    <ul class="tutorial-list">
+      <li>
+        <a class="tutorial-link" href="popular-scholarly-trade.html">
+          Popular, Scholarly, and Trade Articles
+        </a>
+        <p class="tutorial-desc">
+          Learn how to distinguish among popular, scholarly, and trade sources.
+        </p>
+      </li>
+
+      <!--
+        Add new tutorials by copying this <li> block and editing:
+        1) href="your-file-name.html"
+        2) link text
+        3) description
+      -->
+      <!--
+      <li>
+        <a class="tutorial-link" href="new-tutorial-file.html">New Tutorial Title</a>
+        <p class="tutorial-desc">Short description of what this tutorial covers.</p>
+      </li>
+      -->
+    </ul>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>
+        Hosted on GitHub Pages.
+        Example URL format:
+        <code>https://pamelanmartin.github.io/tutorials/[filename].html</code>
+      </p>
+    </div>
+  </footer>
+</body>
+</html>
